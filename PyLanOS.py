@@ -87,7 +87,7 @@ def nmapScan(host,hup,hdown,verbose):
 	    print bcolors.OKBLUE + osres + ' system.' + bcolors.ENDC
     elif 'Linux' in scanlist:
 	    osres = 'Linux'
-	    print bcolors.GREEN + osres + bcolors.ENDC
+	    print bcolors.OKGREEN + osres + bcolors.ENDC
     elif 'Windows' in scanlist:
 	    osres = 'Windows'
 	    print bcolors.OKGREEN + osres+ ' system' + bcolors.ENDC
