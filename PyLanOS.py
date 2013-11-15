@@ -88,22 +88,27 @@ def nmapScan(host,hup,hdown,verbose):
 	    	return osres,hup,hdown
 	
 	print bcolors.OKGREEN + osres + ' system.'
-    elif 'Linux' in scanlist:
-	    osres = 'Linux'
-	    print bcolors.WARNING + "Not sure probably a Linux system."
-    elif 'Windows' in scanlist:
-	    osres = 'Windows'
-	    print bcolors.WARNING + "Not sure probably a Windows system."
-
+	print bcolors.ENDC
     elif 'printer' in scanlist:
 	    osres = 'Printer'
 	    print bcolors.OKBLUE + osres + ' system.'
+	    print bcolors.ENDC
     elif 'Fortinet' in scanlist:
 	    osres = 'Fortinet'
 	    print bcolors.OKBLUE + osres + ' system.'
+	    print bcolors.ENDC
+    elif 'Linux' in scanlist:
+	    osres = 'Linux'
+	    print bcolors.WARNING + "Not sure probably a Linux system."
+	    print bcolors.ENDC
+    elif 'Windows' in scanlist:
+	    osres = 'Windows'
+	    print bcolors.WARNING + "Not sure probably a Windows system."
+	    print bcolors.ENDC
     else:
 	    osres = 'Unknow'
 	    print bcolors.FAIL + osres
+	    print bcolors.ENDC
 	    
     
     return osres,hup,hdown 
