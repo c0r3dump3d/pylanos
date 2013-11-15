@@ -131,7 +131,6 @@ def main():
 
     hello()
     argus=parse.parse_args()
-    fileout='None'
 
     if not os.geteuid()==0:
 	  sys.exit("Only root can run this script.\n")
@@ -139,8 +138,7 @@ def main():
     if argus.host == None and argus.file == None:
         parse.print_help()
         exit(1)
-    if argus.output != None:
-	fileout=argus.output
+    	
 
     else:
 	hosts=[]
@@ -231,10 +229,11 @@ def main():
 	print ('Number of Unknow systems detected: %d (%d %%): ' %(unk,unk*100/hup)) 
 	print bcolors.ENDC
 
-	if fileout != 'None':
+	if argus.output != None:
+		fileout = argus.output
 		fout = open(fileout,'w')
 		for i,host in enumerate(hosts):
-			fout.write(str(host) + ' ' + str(os[i]) + ' system' + '\n')
+			fout.write(host + ' ' + osm[i] + ' system\n')
 			
 
 
