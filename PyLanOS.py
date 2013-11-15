@@ -87,16 +87,16 @@ def nmapScan(host,hup,hdown,verbose):
 	    print bcolors.OKBLUE + osres + ' system.' + bcolors.ENDC
     elif 'Linux' in scanlist:
 	    osres = 'Linux'
-	    print bcolors.OKGREEN + osres + bcolors.ENDC
+	    print bcolors.OKGREEN + osres + ' system.' + bcolors.ENDC
     elif 'Windows' in scanlist:
 	    osres = 'Windows'
-	    print bcolors.OKGREEN + osres+ ' system' + bcolors.ENDC
+	    print bcolors.OKGREEN + osres+ ' system.' + bcolors.ENDC
     elif 'Apple' in scanlist:
 	    osres = 'Apple'
-	    print bcolors.OKGREEN + osres+ ' system' + bcolors.ENDC
+	    print bcolors.OKGREEN + osres+ ' system.' + bcolors.ENDC
     elif 'IOS' in scanlist:
 	    osres = 'IOS'
-	    print bcolors.OKBLUE + osres+ ' system' + bcolors.ENDC
+	    print bcolors.OKBLUE + osres+ ' system.' + bcolors.ENDC
     else:
 	    osres = 'Unknow' 
 	    print bcolors.FAIL + osres  + ' system. Unable to determine the OS type.' + bcolors.ENDC
