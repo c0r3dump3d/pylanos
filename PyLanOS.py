@@ -101,7 +101,7 @@ def nmapScan(host,hup,hdown,verbose):
 	    osres = 'Windows'
 	    print bcolors.WARNING + "Not sure probably a Windows system." + bcolors.ENDC
     else:
-	    osres = 'Unknow'
+	    osres = ' Unknow system. Unable to determine the OS type.' 
 	    print bcolors.FAIL + osres + bcolors.ENDC
 	    
     
@@ -184,7 +184,7 @@ def main():
          
 
 	for host in hosts:
-    		print "Scaning %s with nmap ..." % host
+    		print "Scanning %s with nmap ..." % host
         	os1,hup,hdown = nmapScan(host,hup,hdown,verbose)
 		osm.append(os1)
 	
