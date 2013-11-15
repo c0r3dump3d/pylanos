@@ -84,31 +84,25 @@ def nmapScan(host,hup,hdown,verbose):
 		osres = replace_all(scanlist[osin+1],reps)
     	except ValueError:
 	    	osres = 'Unknow'
-	    	print bcolors.FAIL + ' Unknow system. Unable to determine the OS type.'
+	    	print bcolors.FAIL + ' Unknow system. Unable to determine the OS type.' + bcolors.ENDC
 	    	return osres,hup,hdown
 	
-	print bcolors.OKGREEN + osres + ' system.'
-	print bcolors.ENDC
+	print bcolors.OKGREEN + osres + ' system.'+ bcolors.ENDC
     elif 'printer' in scanlist:
 	    osres = 'Printer'
-	    print bcolors.OKBLUE + osres + ' system.'
-	    print bcolors.ENDC
+	    print bcolors.OKBLUE + osres + ' system.' + bcolors.ENDC
     elif 'Fortinet' in scanlist:
 	    osres = 'Fortinet'
-	    print bcolors.OKBLUE + osres + ' system.'
-	    print bcolors.ENDC
+	    print bcolors.OKBLUE + osres + ' system.' + + bcolors.ENDC
     elif 'Linux' in scanlist:
 	    osres = 'Linux'
-	    print bcolors.WARNING + "Not sure probably a Linux system."
-	    print bcolors.ENDC
+	    print bcolors.WARNING + "Not sure probably a Linux system." + bcolors.ENDC
     elif 'Windows' in scanlist:
 	    osres = 'Windows'
-	    print bcolors.WARNING + "Not sure probably a Windows system."
-	    print bcolors.ENDC
+	    print bcolors.WARNING + "Not sure probably a Windows system." + bcolors.ENDC
     else:
 	    osres = 'Unknow'
-	    print bcolors.FAIL + osres
-	    print bcolors.ENDC
+	    print bcolors.FAIL + osres + bcolors.ENDC
 	    
     
     return osres,hup,hdown 
