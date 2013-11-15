@@ -61,7 +61,7 @@ def nmapScan(host,hup,hdown,verbose):
 
     reps = {";":""," ":"","0":"","1":""}
     try:
-        scanv = subprocess.Popen(["nmap", "-A", str(host)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
+        scanv = subprocess.Popen(["nmap", "-O", str(host)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
     except OSError:
         print "Install nmap: sudo apt-get install nmap"  
 
@@ -117,7 +117,7 @@ def hello():
 	 |_|    \__, |_____\__,_|_| |_|\___/|____/ 
 	        |___/                              
 
-	A little Python script for LAN OS detection (nmap -A)
+	A little Python script for LAN OS detection (nmap -O)
 	 """
 	print bcolors.ENDC
 def main():
@@ -126,7 +126,7 @@ def main():
     parse.add_argument('-H', action='store', dest='host', help='A single host or CIDR notation.')
     parse.add_argument('-f', action='store', dest='file', help='A host list in a file.')
     parse.add_argument('-o', action='store', dest='output', help='The output write to a file.')
-    parse.add_argument('-v', action='store', dest='verbose', default='no', help='Verbose option to see the result of nmap -A.')
+    parse.add_argument('-v', action='store', dest='verbose', default='no', help='Verbose option to see the result of nmap -O.')
 
     hello()
     argus=parse.parse_args()

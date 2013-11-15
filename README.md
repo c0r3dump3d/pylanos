@@ -6,14 +6,14 @@
 	 |_|    \__, |_____\__,_|_| |_|\___/|____/ 
 	        |___/                              
 
-A little Python script for LAN OS detection (nmap -A)
+A little Python script for LAN OS detection (nmap -O)
 
 
 What's PyLanOS?
 ===============
 
 	PyLanOS it's a simple Python script to scan a LAN network and detect the Operative System present in the LAN. 
-	It's make use of nmap with -A option to scan, and then parse the result. 
+	It's make use of nmap with -O option to scan and then parse the result. 
 
 
 Advice: 
@@ -35,14 +35,14 @@ Usage:
 
 	usage: PyLanOS.py [-h] [-H HOST] [-f FILE] [-o OUTPUT] [-v VERBOSE]
 
-	A little Python script for LAN OS detection (nmap -A)
+	A little Python script for LAN OS detection (nmap -O)
 
 	optional arguments:
   		-h, --help  show this help message and exit
   		-H HOST     A single host or CIDR notation.
   		-f FILE     A host list in a file.
   		-o OUTPUT   The output write to a file.
-  		-v VERBOSE  Verbose option to see the result of nmap -A scan.
+  		-v VERBOSE  Verbose option to see the result of nmap -O scan.
 
 Example:
 ========
