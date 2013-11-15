@@ -93,7 +93,7 @@ def nmapScan(host,hup,hdown,verbose):
 	    print bcolors.OKBLUE + osres + ' system.' + bcolors.ENDC
     elif 'Fortinet' in scanlist:
 	    osres = 'Fortinet'
-	    print bcolors.OKBLUE + osres + ' system.' + + bcolors.ENDC
+	    print bcolors.OKBLUE + osres + ' system.' + bcolors.ENDC
     elif 'Linux' in scanlist:
 	    osres = 'Linux'
 	    print bcolors.WARNING + "Not sure probably a Linux system." + bcolors.ENDC
