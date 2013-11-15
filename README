@@ -10,28 +10,24 @@ A little Python script for LAN OS detection (nmap -A)
 
 
 What's PyLanOS?
-===============
 
 	PyLanOS it's a simple Python script to scan a LAN network and detect the Operative System present in the LAN. 
 	It's make use of nmap with -A option to scan, and then parse the result. 
 
 
 Advice: 
-=======
 
 	Like others offensive tools, the authors disclaims all responsibility in the use of this script.
 
 	
 
 Installing:
-===========
 
 	# apt-get install python-ipy python-nmap 
 	git clone https://github.com/c0r3dump3d/pylanos.git
 
 
 Usage:
-======
 
 	usage: PyLanOS.py [-h] [-H HOST] [-f FILE] [-o OUTPUT] [-v VERBOSE]
 
@@ -45,7 +41,6 @@ Usage:
   		-v VERBOSE  Verbose option to see the result of nmap -A scan.
 
 Example:
-========
 	
 	For better performace of the scan it's necessary root privileges.
 
@@ -55,7 +50,6 @@ Example:
 
 
 Author:
-=======
 
         c0r3dump | coredump<@>autistici.org
 
