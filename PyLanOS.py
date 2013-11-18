@@ -127,7 +127,7 @@ def main():
     parse.add_argument('-H', action='store', dest='host', help='A single host or CIDR notation.')
     parse.add_argument('-f', action='store', dest='file', help='A host list in a file.')
     parse.add_argument('-o', action='store', dest='output', help='The output write to a file.')
-    parse.add_argument('-v', action='store', dest='verbose', default='no', help='Verbose option to see the result of nmap -O.')
+    parse.add_argument('-v', action='store', dest='verbose', default='no', help='Verbose option to see the result of nmap -O, for each host.')
 
     hello()
     argus=parse.parse_args()
