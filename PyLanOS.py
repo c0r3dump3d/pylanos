@@ -33,7 +33,11 @@ import time
 import os,sys
 import argparse
 import subprocess
-from IPy import IP
+try:
+    from IPy import IP
+except ImportError:
+    print "You need to install IPy module: apt-get install python-ipy"
+    exit(1)
 
 class bcolors:
     HEADER = '\033[95m'
@@ -159,6 +163,7 @@ def main():
 			line = line.split('\n')
 			hosts.append(line[0])
 			nuhost = nuhost + 1
+			
 	else:
 
         	try:
@@ -170,7 +175,7 @@ def main():
 		if "/" in argus.host:
 			ips = argus.host
 			for ip in IP(argus.host):
-				hosts.append(ip)
+				hosts.append(str(ip))
 				nuhost = nuhost + 1
 			del hosts[0]
 
@@ -178,12 +183,13 @@ def main():
         		hosts.append(argus.host)
 			nuhost = nuhost + 1
 
-         
-
+	timeStart = int(time.time())
 	for host in hosts:
     		print "Scanning %s with nmap ..." % host
         	os1,hup,hdown = nmapScan(host,hup,hdown,verbose)
 		osm.append(os1)
+	timeDone = int(time.time())
+	timeRes = timeDone-timeStart
 	
 	for oss in osm:
 		if oss == "Windows":
@@ -207,29 +213,45 @@ def main():
 	print
 	print bcolors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
 	print bcolors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
-	print bcolors.HEADER + '++              Statistics            ++'
+	print bcolors.HEADER + '++           SOME STATISTICS          ++'
 	print bcolors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
 	print bcolors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
-	print
 	print bcolors.OKBLUE
+	print 'Scan time (s): ' + str(timeRes)
 	print 'Number of host: ' + str(nuhost) 
 	print 'Host Alive: ' + str(hup)
 	print 'Host Down: ' + str(hdown)
-	print ('Number of Windows systems detected: %d (%d %%)' %(win,win*100/hup))
-	print ('Number of GNU/Linux systems detected: %d (%d %%)' %(lin,lin*100/hup))
-	print ('Number of Apple systems detected: %d (%d %%): ' %(app,app*100/hup)) 
-	print ('Number of Printer systems detected: %d (%d %%): ' %(prit,prit*100/hup)) 
-	print ('Number of Cisco systems detected: %d (%d %%): ' %(ios,ios*100/hup)) 
-	print ('Number of Fortinet systems detected: %d (%d %%): ' %(forti,forti*100/hup)) 
-	print ('Number of others systems detected: %d (%d %%): ' %(other,other*100/hup)) 
-	print ('Number of Unknow systems detected: %d (%d %%): ' %(unk,unk*100/hup)) 
+	print
+
+	if win != 0:
+		print ('[+] Number of Windows systems detected: %d (%d %%)' %(win,win*100/hup))
+	if lin != 0:	
+		print ('[+] Number of GNU/Linux systems detected: %d (%d %%)' %(lin,lin*100/hup))
+	if app != 0:
+		print ('[+] Number of Apple systems detected: %d (%d %%)' %(app,app*100/hup)) 
+	if prit != 0:
+		print ('[+] Number of Printer systems detected: %d (%d %%)' %(prit,prit*100/hup)) 
+	if ios != 0:
+		print ('[+] Number of Cisco systems detected: %d (%d %%)' %(ios,ios*100/hup)) 
+	if forti != 0:
+		print ('[+] Number of Fortinet systems detected: %d (%d %%)' %(forti,forti*100/hup)) 
+	if other != 0:	
+		print ('[+] Number of others systems detected: %d (%d %%)' %(other,other*100/hup)) 
+	if unk != 0:
+		print ('[+] Number of Unknow systems detected: %d (%d %%)' %(unk,unk*100/hup)) 
+
 	print bcolors.ENDC
+
+	hostos={}
+
+	for i,host in enumerate(hosts):
+	    hostos[host]=osm[i]
 
 	if argus.output != None:
 		fileout = argus.output
 		fout = open(fileout,'w')
-		for i,host in enumerate(hosts):
-			fout.write(host + ' ' + osm[i] + ' system\n')
+		for key in hostos: 
+			fout.write( key + ' ==> ' + hostos[key] + ' system\n')
 			
 
 
