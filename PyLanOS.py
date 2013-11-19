@@ -61,11 +61,16 @@ def replace_all(text, dic):
     	text = text.replace(i, j)
     return text
 
-def nmapScan(host,hup,hdown,verbose):
+def nmapScan(host,hup,hdown,option,verbose):
+
+	
 
     reps = {";":""," ":"","0":"","1":""}
     try:
-        scanv = subprocess.Popen(["nmap", "-O", str(host)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
+	    if option == 'lan':
+		    scanv = subprocess.Popen(["nmap", "-PR", "-O", str(host)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
+	    else:
+		    scanv = subprocess.Popen(["nmap", "-PE","-PP","-PS21,22,23,25,80,443,3306,3389,8080","-O", str(host)],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
     except OSError:
         print "Install nmap: sudo apt-get install nmap"  
 
@@ -127,7 +132,8 @@ def main():
     parse.add_argument('-H', action='store', dest='host', help='A single host or CIDR notation.')
     parse.add_argument('-f', action='store', dest='file', help='A host list in a file.')
     parse.add_argument('-o', action='store', dest='output', help='The output write to a file.')
-    parse.add_argument('-v', action='store', dest='verbose', default='no', help='Verbose option to see the result of nmap -O, for each host.')
+    parse.add_argument('-l', action='store', dest='nolan', default='no', help='No LAN host discover. Default no.')
+    parse.add_argument('-v', action='store', dest='verbose', default='no', help='Verbose option to see the result of nmap -O, for each host. Default no.')
 
     hello()
     argus=parse.parse_args()
@@ -138,6 +144,12 @@ def main():
     if argus.host == None and argus.file == None:
         parse.print_help()
         exit(1)
+    if argus.nolan != 'yes' and argus.nolan != 'no':
+        parse.print_help()
+	exit(1)
+    if argus.verbose != 'yes' and argus.verbose != 'no':
+        parse.print_help()
+	exit(1)
     	
 
     else:
@@ -156,6 +168,11 @@ def main():
 	forti = 0
 
 	verbose = argus.verbose
+
+	if argus.nolan == 'yes':
+		option = 'nolan'
+	else:
+		option = 'lan'
 
 	if argus.file != None:
 		hostFile = open (argus.file, 'r')
@@ -186,7 +203,7 @@ def main():
 	timeStart = int(time.time())
 	for host in hosts:
     		print "Scanning %s with nmap ..." % host
-        	os1,hup,hdown = nmapScan(host,hup,hdown,verbose)
+        	os1,hup,hdown = nmapScan(host,hup,hdown,option,verbose)
 		osm.append(os1)
 	timeDone = int(time.time())
 	timeRes = timeDone-timeStart
