@@ -239,6 +239,8 @@ def main():
 	print 'Host Alive: ' + str(hup)
 	print 'Host Down: ' + str(hdown)
 	print
+	if hup == 0:
+		exit(0)
 
 	if win != 0:
 		print ('[+] Number of Windows systems detected: %d (%d %%)' %(win,win*100/hup))
