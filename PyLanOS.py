@@ -75,7 +75,7 @@ def nmapScan(host,hup,hdown,verbose):
     
     if "down" in scanv:
 	    print '|___ ' +'it\'s down.'
-	    osres = 'None'
+	    osres = 'down'
 	    hdown = hdown + 1
 	    return osres,hup,hdown
     
@@ -118,7 +118,7 @@ def hello():
 	 |_|    \__, |_____\__,_|_| |_|\___/|____/ 
 	        |___/                              
 
-	A little Python script for LAN OS detection (nmap -O)
+	A little Python script for LAN OS detection using nmap -O.
 	 """
 	print bcolors.ENDC
 def main():
@@ -251,7 +251,10 @@ def main():
 		fileout = argus.output
 		fout = open(fileout,'w')
 		for key in hostos: 
-			fout.write( key + ' ==> ' + hostos[key] + ' system\n')
+			if hostos[key] == 'down':
+				fout.write( key + ' ==> ' + hostos[key]+'\n')
+			else:
+				fout.write( key + ' ==> ' + hostos[key] + ' system\n')
 			
 
 

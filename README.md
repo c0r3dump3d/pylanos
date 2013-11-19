@@ -6,7 +6,7 @@
 	 |_|    \__, |_____\__,_|_| |_|\___/|____/ 
 	        |___/                              
 
-A little Python script for LAN OS detection (nmap -O)
+A little Python script for LAN OS detection using nmap -O.
 
 
 What's PyLanOS?
