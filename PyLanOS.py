@@ -128,7 +128,7 @@ def hello():
 	print bcolors.ENDC
 def main():
  
-    parse = argparse.ArgumentParser(description='A little Python script for LAN OS detection (nmap -A)')
+    parse = argparse.ArgumentParser(description='A little Python script for LAN OS detection (nmap -O)')
     parse.add_argument('-H', action='store', dest='host', help='A single host or CIDR notation.')
     parse.add_argument('-f', action='store', dest='file', help='A host list in a file.')
     parse.add_argument('-o', action='store', dest='output', help='The output write to a file.')
@@ -223,7 +223,7 @@ def main():
 			prit = prit + 1
 		elif oss == "Fortinet":
 			forti = forti + 1
-		elif oss !="None":
+		elif oss != "down":
 			other = other + 1
 
 
