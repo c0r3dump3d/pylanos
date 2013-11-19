@@ -6,7 +6,7 @@ __license__="""
 PyLanOS, a simple script to detect LAN OS detection, using nmap -A option.
 
 
-Authors:
+Author:
         c0r3dump | coredump<@>autistici.org
 
 PyLanOS project site: https://github.com/c0r3dump3d/pylanos 
