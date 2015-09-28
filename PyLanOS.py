@@ -38,8 +38,12 @@ import subprocess
 try:
     from IPy import IP
 except ImportError:
-    print "You need to install IPy module: apt-get install python-ipy"
+    print("You need to install IPy module: apt-get install python-ipy")
     exit(1)
+
+
+class NmapDoesNotExistError(Exception):
+    pass
 
 
 class BackgroundColors(object):
