@@ -69,7 +69,7 @@ def replace_all(text, dic):
     return text
 
 
-def nmapScan(host, hup, hdown, option, verbose):
+def nmapScan(host, hup, hdown, option, verbose=False):
 
     #reps = {";": "", " ": "", "0": "", "1": ""}
     try:
@@ -86,7 +86,7 @@ def nmapScan(host, hup, hdown, option, verbose):
         print("Install nmap: sudo apt-get install nmap")
 
     scanlist = scanv.split()
-    if verbose == 'yes':
+    if verbose:
         print(scanlist)
 
     if "down" in scanv:
