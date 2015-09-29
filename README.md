@@ -26,7 +26,7 @@ Advice:
 Installing:
 ===========
 
-	# apt-get install python-ipy python-nmap 
+	# pip install python-ipy python-nmap 
 	# git clone https://github.com/c0r3dump3d/pylanos.git
 
 
