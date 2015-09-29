@@ -97,7 +97,6 @@ def nmapScan(host, hup, hdown, option, verbose=False):
 
     print '|___' + ' it\'s up ...',
     hup = hup + 1
-    scanlist = scanv.split()
 
     if 'printer' in scanlist:
         osres = 'Printer'
