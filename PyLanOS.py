@@ -101,33 +101,43 @@ def nmapScan(host, hup, hdown, option, verbose=False):
 
     if 'printer' in scanlist:
         osres = 'Printer'
-        print bcolors.OKBLUE + osres + ' system.' + bcolors.ENDC
+        print BackgroundColors.OKBLUE + osres + ' system.' + BackgroundColors.ENDC
     elif 'Fortinet' in scanlist:
         osres = 'Fortinet'
-        print bcolors.OKBLUE + osres + ' system.' + bcolors.ENDC
+        print BackgroundColors.OKBLUE + osres + ' system.' + BackgroundColors.ENDC
     elif 'Linux' in scanlist:
         osres = 'Linux'
-        print bcolors.OKGREEN + osres + ' system.' + bcolors.ENDC
+        print BackgroundColors.OKGREEN + osres + ' system.' + BackgroundColors.ENDC
     elif 'Windows' in scanlist:
         osres = 'Windows'
-        print bcolors.OKGREEN + osres + ' system.' + bcolors.ENDC
+        print BackgroundColors.OKGREEN + osres + ' system.' + BackgroundColors.ENDC
     elif 'Apple' in scanlist:
         osres = 'Apple'
-        print bcolors.OKGREEN + osres + ' system.' + bcolors.ENDC
+        print BackgroundColors.OKGREEN + osres + ' system.' + BackgroundColors.ENDC
     elif 'IOS' in scanlist:
         osres = 'IOS'
-        print bcolors.OKBLUE + osres + ' system.' + bcolors.ENDC
+        print BackgroundColors.OKBLUE + osres + ' system.' + BackgroundColors.ENDC
     else:
         osres = 'Unknow'
-        print(bcolors.FAIL + osres + ' system.Unable to determine \
-                the OS type.' + bcolors.ENDC)
+        print(BackgroundColors.FAIL + osres + ' system.Unable to determine \
+                the OS type.' + BackgroundColors.ENDC)
 
     return osres, hup, hdown
 
 
 def hello():
-    print(bcolors.OKGREEN)
-    print(bcolors.ENDC)
+    print(BackgroundColors.OKGREEN)
+    print """
+          ____        _                 ___  ____  
+         |  _ \ _   _| |    __ _ _ __  / _ \/ ___| 
+         | |_) | | | | |   / _` | '_ \| | | \___ \ 
+         |  __/| |_| | |__| (_| | | | | |_| |___) |
+         |_|    \__, |_____\__,_|_| |_|\___/|____/ 
+                |___/                              
+
+        A little Python script for LAN OS detection using nmap -O.
+         """
+    print(BackgroundColors.ENDC)
 
 
 def main():
@@ -236,12 +246,12 @@ def main():
             other = other + 1
 
     print
-    print bcolors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
-    print bcolors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
-    print bcolors.HEADER + '++           SOME STATISTICS          ++'
-    print bcolors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
-    print bcolors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
-    print bcolors.OKBLUE
+    print BackgroundColors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
+    print BackgroundColors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
+    print BackgroundColors.HEADER + '++           SOME STATISTICS          ++'
+    print BackgroundColors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
+    print BackgroundColors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
+    print BackgroundColors.OKBLUE
     print 'Scan time (s): ' + str(timeRes)
     print 'Number of host: ' + str(nuhost)
     print 'Host Alive: ' + str(hup)
@@ -275,7 +285,7 @@ def main():
         print('[+] Number of Unknow systems detected: %d (%d %%)'
               % (unk, unk * 100 / hup))
 
-    print bcolors.ENDC
+    print BackgroundColors.ENDC
 
     hostos = {}
 
