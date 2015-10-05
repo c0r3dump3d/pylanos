@@ -38,7 +38,7 @@ import subprocess
 try:
     from IPy import IP
 except ImportError:
-    print("You need to install IPy module: apt-get install python-ipy")
+    print("You need to install IPy module: pip install IPy")
     exit(1)
 
 
@@ -63,17 +63,13 @@ class BackgroundColors(object):
             self.ENDC = ''
 
 
-def replace_all(text, dic):
-    for i, j in dic.iteritems():
-        text = text.replace(i, j)
-    return text
+def nmap_scan(host, lan=False, verbose=False):
 
+    hup = 0
+    hdown = 0
 
-def nmapScan(host, hup, hdown, option, verbose=False):
-
-    #reps = {";": "", " ": "", "0": "", "1": ""}
     try:
-        if option == 'lan':
+        if lan:
             scanv = subprocess.Popen(["nmap", "-PR", "-O", str(host)],
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE).communicate()[0]
@@ -87,7 +83,7 @@ def nmapScan(host, hup, hdown, option, verbose=False):
 
     scanlist = scanv.split()
     if verbose:
-        print(scanlist)
+        print(scanv)
 
     if "down" in scanv:
         print '|___ ' + 'it\s down.'
@@ -107,8 +103,8 @@ def nmapScan(host, hup, hdown, option, verbose=False):
     elif 'Linux' in scanlist:
         osres = 'Linux'
         print BackgroundColors.OKGREEN + osres + ' system.' + BackgroundColors.ENDC
-    elif 'Windows' in scanlist:
-        osres = 'Windows'
+    elif 'windows_counterdows' in scanlist:
+        osres = 'windows_counterdows'
         print BackgroundColors.OKGREEN + osres + ' system.' + BackgroundColors.ENDC
     elif 'Apple' in scanlist:
         osres = 'Apple'
@@ -131,6 +127,19 @@ def hello():
 
 def main():
 
+    host_to_os = {} # map os to each host
+    hosts = [] # list to keep the hosts for scanning.
+    os_types = [] # keeps the different os types
+    host_counter = 0 # keeps track of number of hosts
+    linux_counter = 0 # keeps track of linux hosts
+    apple_counter = 0 # keeps track of apple hosts
+    windows_counter = 0 # keeps track of windows_counterdows hosts
+    ios_counter = 0 # keeps track of ios hosts
+    forti_counter = 0 # keeps track of forti hosts
+    unknown_counter = 0 # keeps track of unknown os
+    printer_counter = 0 # keeps track of printers
+    other_counter = 0 # keeps track of other os types
+
     parse = argparse.ArgumentParser(description='A little Python script for \
                                     LAN OS detection (nmap -O)')
     parse.add_argument('-H', action='store', dest='host', help='A single host \
@@ -139,100 +148,80 @@ def main():
                        in a file.')
     parse.add_argument('-o', action='store', dest='output', help='The output \
                        write to a file.')
-    parse.add_argument('-l', action='store', dest='nolan', default='no',
-                       help='No LAN host discover. Default no.')
-    parse.add_argument('-v', action='store', dest='verbose', default='no',
-                       help='Verbose option to see the result of nmap -O, \
-                       for each host. Default no.')
+    parse.add_argument('-l', action='store', type=bool, dest='lan',
+                       default=False, help='No LAN host discover')
+    parse.add_argument('-v', action='store', type=bool, dest='verbose',
+                       default=False, help='Verbose option to see the result \
+                       of nmap -O, for each host')
 
     hello()
     argus = parse.parse_args()
 
     if not os.geteuid() == 0:
-        sys.exit("Only root can run this script.\n")
+        sys.exit("Root permissions are needed to scan for os.\n")
 
-    elif argus.host is None and argus.file is None:
-        parse.print_help()
-        exit(1)
-    elif argus.nolan != 'yes' and argus.nolan != 'no':
+    if argus.host is None and argus.file is None:
         parse.print_help()
         exit(1)
 
-    elif argus.verbose != 'yes' and argus.verbose != 'no':
-        parse.print_help()
-        exit(1)
+    if argus.verbose:
+        verbose = True
     else:
-        hosts = []
-        osm = []
-        nuhost = 0
-        hup = 0
-        hdown = 0
-        win = 0
-        lin = 0
-        app = 0
-        ios = 0
-        other = 0
-        prit = 0
-        unk = 0
-        forti = 0
+        verbose = False
 
-    verbose = argus.verbose
-
-    if argus.nolan == 'yes':
-        option = 'nolan'
+    if argus.lan:
+        lan = True
     else:
-        option = 'lan'
+        lan = False
+
     if argus.file is not None:
-        hostFile = open(argus.file, 'r')
-        for line in hostFile.readlines():
-            line = line.split('\n')
-            hosts.append(line[0])
-            nuhost = nuhost + 1
-
+        with open(argus.file, 'r') as f:
+            for line in f.readlines():
+                line = line.split('\n')
+                hosts.append(line[0])
+                host_counter = host_counter + 1
     else:
-
         try:
             IP(argus.host)
         except ValueError:
-            print "Invalid host address."
+            print("Invalid host address.")
             exit(1)
 
         if "/" in argus.host:
-            ips = argus.host
             for ip in IP(argus.host):
                 hosts.append(str(ip))
-                nuhost = nuhost + 1
+                host_counter = host_counter + 1
             del hosts[0]
 
         else:
             hosts.append(argus.host)
-            nuhost = nuhost + 1
+            host_counter = host_counter + 1
 
     timeStart = int(time.time())
     for host in hosts:
         print "Scanning %s with nmap ..." % host
-        os1, hup, hdown = nmapScan(host, hup, hdown, option, verbose)
-        osm.append(os1)
+        os_type, hup, hdown = nmap_scan(host, lan, verbose)
+        os_types.append(os_type)
     timeDone = int(time.time())
     timeRes = timeDone-timeStart
 
-    for oss in osm:
-        if oss == "Windows":
-            win = win + 1
-        elif oss == "Linux":
-            lin = lin + 1
-        elif oss == "Apple":
-            app = app + 1
-        elif oss == "Unknow":
-            unk = unk + 1
-        elif oss == "IOS":
-            ios = ios + 1
-        elif oss == "Printer":
-            prit = prit + 1
-        elif oss == "Fortinet":
-            forti = forti + 1
-        elif oss != "down":
-            other = other + 1
+    for os_type in os_types:
+        if os_type == "windows_counterdows":
+            windows_counter = windows_counter + 1
+        elif os_type == "Linux":
+            linux_counter = linux_counter + 1
+        elif os_type == "Apple":
+            apple_counter = apple_counter + 1
+        elif os_type == "Unknow":
+            unknown_counter = unknown_counter + 1
+        elif os_type == "IOS":
+            ios_counter = ios_counter + 1
+        elif os_type == "Printer":
+            printer_counter = printer_counter + 1
+        elif os_type == "Fortinet":
+            forti_counter = forti_counter + 1
+        elif os_type != "down":
+            other_counter = other_counter + 1
 
     print
     print BackgroundColors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
@@ -242,53 +231,51 @@ def main():
     print BackgroundColors.HEADER + '++++++++++++++++++++++++++++++++++++++++'
     print BackgroundColors.OKBLUE
     print 'Scan time (s): ' + str(timeRes)
-    print 'Number of host: ' + str(nuhost)
+    print 'Number of hosts: ' + str(host_counter)
     print 'Host Alive: ' + str(hup)
     print 'Host Down: ' + str(hdown)
     print
     if hup == 0:
         exit(0)
 
-    if win != 0:
-        print('[+] Number of Windows systems detected: %d (%d %%)'
-              % (win, win * 100 / hup))
-    if lin != 0:
+    if windows_counter != 0:
+        print('[+] Number of windows systems detected: %d (%d %%)'
+              % (windows_counter, windows_counter * 100 / hup))
+    if linux_counter != 0:
         print('[+] Number of GNU/Linux systems detected: %d (%d %%)'
-              % (lin, lin * 100 / hup))
-    if app != 0:
+              % (linux_counter, linux_counter * 100 / hup))
+    if apple_counter != 0:
         print('[+] Number of Apple systems detected: %d (%d %%)'
-              % (app, app * 100 / hup))
-    if prit != 0:
+              % (apple_counter, apple_counter * 100 / hup))
+    if printer_counter != 0:
         print('[+] Number of Printer systems detected: %d (%d %%)'
-              % (prit, prit * 100 / hup))
-    if ios != 0:
+              % (printer_counter, printer_counter * 100 / hup))
+    if ios_counter != 0:
         print('[+] Number of Cisco systems detected: %d (%d %%)'
-               % (ios, ios * 100 / hup))
-    if forti != 0:
+               % (ios_counter, ios_counter * 100 / hup))
+    if forti_counter != 0:
         print('[+] Number of Fortinet systems detected: %d (%d %%)'
-               % (forti, forti * 100 / hup))
-    if other != 0:
-        print('[+] Number of others systems detected: %d (%d %%)'
-              % (other, other * 100 / hup))
-    if unk != 0:
+               % (forti_counter, forti_counter * 100 / hup))
+    if other_counter != 0:
+        print('[+] Number of other_counters systems detected: %d (%d %%)'
+              % (other_counter, other_counter * 100 / hup))
+    if unknown_counter != 0:
         print('[+] Number of Unknow systems detected: %d (%d %%)'
-              % (unk, unk * 100 / hup))
+              % (unknown_counter, unknown_counter * 100 / hup))
 
     print BackgroundColors.ENDC
 
-    hostos = {}
-
-    for i, host in enumerate(hosts):
-        hostos[host] = osm[i]
+    for idx, host in enumerate(hosts):
+        host_to_os[host] = os_types[idx] # map os to host
 
     if argus.output is not None:
         fileout = argus.output
         fout = open(fileout, 'w')
-        for key in hostos:
-            if hostos[key] == 'down':
-                fout.write(key + ' ==> ' + hostos[key]+'\n')
+        for key in host_to_os:
+            if host_to_os[key] == 'down':
+                fout.write(key + ' ==> ' + host_to_os[key]+'\n')
             else:
-                fout.write(key + ' ==> ' + hostos[key] + ' system\n')
+                fout.write(key + ' ==> ' + host_to_os[key] + ' system\n')
 
 
 if __name__ == "__main__":
