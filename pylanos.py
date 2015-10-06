@@ -30,6 +30,7 @@ The authors disclaims all responsibility in the use of this tool.
 """
 
 import time
+import errno
 import os
 import sys
 import argparse
@@ -78,8 +79,9 @@ def nmap_scan(host, lan=False, verbose=False):
                                      "-PS21,22,23,25,80, 443,3306,3389,8080",
                                      "-O", str(host)], stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE).communicate()[0]
-    except OSError:
-        print("Install nmap: sudo apt-get install nmap")
+    except OSError as e:
+        if e.errno == errno.ENOENT:
+            raise NmapDoesNotExistError('Make sure nmap is installed.\n')
 
     scanlist = scanv.split()
     if verbose:
@@ -270,12 +272,9 @@ def main():
 
     if argus.output is not None:
         fileout = argus.output
-        fout = open(fileout, 'w')
-        for key in host_to_os:
-            if host_to_os[key] == 'down':
-                fout.write(key + ' ==> ' + host_to_os[key]+'\n')
-            else:
-                fout.write(key + ' ==> ' + host_to_os[key] + ' system\n')
+        with open(fileout, 'w') as f:
+            for key in host_to_os:
+                f.write(key + ' ==> ' + host_to_os[key] + '\n')
 
 
 if __name__ == "__main__":
