@@ -66,8 +66,7 @@ class BackgroundColors(object):
 
 def nmap_scan(host, lan=False, verbose=False):
 
-    hup = 0
-    hdown = 0
+    hup = False # consider the host down
 
     try:
         if lan:
@@ -90,11 +89,11 @@ def nmap_scan(host, lan=False, verbose=False):
     if "down" in scanv:
         print '|___ ' + 'it\s down.'
         osres = 'down'
-        hdown = hdown + 1
-        return osres, hup, hdown
+
+        return osres, hup
 
     print '|___' + ' it\'s up ...',
-    hup = hup + 1
+    hup = True
 
     if 'printer' in scanlist:
         osres = 'Printer'
@@ -119,7 +118,7 @@ def nmap_scan(host, lan=False, verbose=False):
         print(BackgroundColors.FAIL + osres + ' system.Unable to determine \
                 the OS type.' + BackgroundColors.ENDC)
 
-    return osres, hup, hdown
+    return osres, hup
 
 
 def hello():
@@ -141,6 +140,8 @@ def main():
     unknown_counter = 0 # keeps track of unknown os
     printer_counter = 0 # keeps track of printers
     other_counter = 0 # keeps track of other os types
+    hosts_down = 0 # keeps track of hosts that are down
+    hosts_up = 0 # keeps track of hosts that are alive
 
     parse = argparse.ArgumentParser(description='A little Python script for \
                                     LAN OS detection (nmap -O)')
@@ -202,8 +203,12 @@ def main():
     timeStart = int(time.time())
     for host in hosts:
         print "Scanning %s with nmap ..." % host
-        os_type, hup, hdown = nmap_scan(host, lan, verbose)
+        os_type, hup = nmap_scan(host, lan, verbose)
         os_types.append(os_type)
+        if hup:
+            hosts_up += 1
+        else:
+            hosts_down += 1
     timeDone = int(time.time())
     timeRes = timeDone-timeStart
 
@@ -234,36 +239,34 @@ def main():
     print BackgroundColors.OKBLUE
     print 'Scan time (s): ' + str(timeRes)
     print 'Number of hosts: ' + str(host_counter)
-    print 'Host Alive: ' + str(hup)
-    print 'Host Down: ' + str(hdown)
+    print 'Host Alive: ' + str(hosts_up)
+    print 'Host Down: ' + str(hosts_down)
     print
-    if hup == 0:
-        exit(0)
 
     if windows_counter != 0:
         print('[+] Number of windows systems detected: %d (%d %%)'
-              % (windows_counter, windows_counter * 100 / hup))
+              % (windows_counter, windows_counter * 100 / hosts_up))
     if linux_counter != 0:
         print('[+] Number of GNU/Linux systems detected: %d (%d %%)'
-              % (linux_counter, linux_counter * 100 / hup))
+              % (linux_counter, linux_counter * 100 / hosts_up))
     if apple_counter != 0:
         print('[+] Number of Apple systems detected: %d (%d %%)'
-              % (apple_counter, apple_counter * 100 / hup))
+              % (apple_counter, apple_counter * 100 / hosts_up))
     if printer_counter != 0:
         print('[+] Number of Printer systems detected: %d (%d %%)'
-              % (printer_counter, printer_counter * 100 / hup))
+              % (printer_counter, printer_counter * 100 / hosts_up))
     if ios_counter != 0:
         print('[+] Number of Cisco systems detected: %d (%d %%)'
-               % (ios_counter, ios_counter * 100 / hup))
+               % (ios_counter, ios_counter * 100 / hosts_up))
     if forti_counter != 0:
         print('[+] Number of Fortinet systems detected: %d (%d %%)'
-               % (forti_counter, forti_counter * 100 / hup))
+               % (forti_counter, forti_counter * 100 / hosts_up))
     if other_counter != 0:
         print('[+] Number of other_counters systems detected: %d (%d %%)'
-              % (other_counter, other_counter * 100 / hup))
+              % (other_counter, other_counter * 100 / hosts_up))
     if unknown_counter != 0:
         print('[+] Number of Unknow systems detected: %d (%d %%)'
-              % (unknown_counter, unknown_counter * 100 / hup))
+              % (unknown_counter, unknown_counter * 100 / hosts_up))
 
     print BackgroundColors.ENDC
 
